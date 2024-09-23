@@ -1,4 +1,5 @@
 // pages/categories.tsx
+"use client";
 import React from "react";
 import Link from "next/link";
 import styles from "./categories.module.css";

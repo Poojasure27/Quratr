@@ -1,5 +1,5 @@
-// pages/restaurants/[category].tsx
-import { useRouter } from "next/router";
+"use client";
+import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import * as XLSX from "xlsx"; // For fetching restaurant data from a spreadsheet
 import styles from "./dynamicCat.module.css";
@@ -13,8 +13,7 @@ interface Restaurant {
 }
 
 const CategoryPage: React.FC = () => {
-  const router = useRouter();
-  const { category } = router.query; // Get category from URL
+  const { category } = useParams(); // Get category from URL
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
 
   useEffect(() => {
@@ -30,10 +29,13 @@ const CategoryPage: React.FC = () => {
         const worksheet = workbook.Sheets[workbook.SheetNames[0]];
         const json: Restaurant[] = XLSX.utils.sheet_to_json(worksheet);
 
+        // Ensure category is a string
+        const categoryString = Array.isArray(category) ? category[0] : category || '';
+
         // Filter restaurants based on the category parameter
         const filteredRestaurants = json.filter(
           (restaurant) =>
-            restaurant.Cuisine?.toLowerCase() === category?.toString().toLowerCase()
+            restaurant.Cuisine?.toLowerCase() === categoryString.toLowerCase()
         );
         setRestaurants(filteredRestaurants);
       };
@@ -44,9 +46,12 @@ const CategoryPage: React.FC = () => {
     if (category) fetchRestaurants();
   }, [category]);
 
+  // Ensure categoryString is always a string for rendering
+  const categoryDisplay = Array.isArray(category) ? category[0] : category;
+
   return (
     <div className={styles.categoryPage}>
-      <h1>{category ? category.charAt(0).toUpperCase() + category.slice(1) : "Loading..."} Restaurants</h1>
+      <h1>{categoryDisplay ? categoryDisplay.charAt(0).toUpperCase() + categoryDisplay.slice(1) : "Loading..."} Restaurants</h1>
       <div className={styles.restaurantList}>
         {restaurants.map((restaurant) => (
           <div key={restaurant.Name} className={styles.restaurantCard}>
