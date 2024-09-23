@@ -1,0 +1,25 @@
+/* category.module.css */
+.categoryPage {
+    padding: 20px;
+  }
+  
+  .restaurantList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .restaurantCard {
+    width: 200px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    text-align: center;
+  }
+  
+  .restaurantCard img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+  
