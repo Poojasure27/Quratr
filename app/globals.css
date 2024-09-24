@@ -2,3 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  html {
+    @apply bg-custom-red;
+  }
+}
+
+:root {
+  --color-custom-red: #F5F5F5;
+}
