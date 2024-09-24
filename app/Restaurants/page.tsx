@@ -108,12 +108,17 @@ const RestaurantCards: React.FC = () => {
   const handleSwipe = (direction: SwipeDirection, restaurant: Restaurant) => {
     if (['up', 'down', 'left', 'right'].includes(direction)) { // Validate direction
       if (direction === 'up') {
-        setSelectedRestaurant(restaurant);
-        setShowDetails(true);
+        showRestaurantDetails(restaurant);
       } else {
         swiped(direction, restaurant.Name, currentIndex);
       }
     }
+  };
+
+  // Show restaurant details
+  const showRestaurantDetails = (restaurant: Restaurant) => {
+    setSelectedRestaurant(restaurant);
+    setShowDetails(true);
   };
 
   return (
@@ -148,7 +153,10 @@ const RestaurantCards: React.FC = () => {
 
       {!showDetails && (
         <div className={styles.swipeUpMessage}>
-          <KeyboardArrowUpIcon className={styles.bounceIcon} />
+          <KeyboardArrowUpIcon 
+            className={styles.bounceIcon} 
+            onClick={() => selectedRestaurant && showRestaurantDetails(selectedRestaurant)} // Call function on click
+          />
           <p>Swipe up</p>
         </div>
       )}
