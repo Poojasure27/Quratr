@@ -114,6 +114,8 @@
 
     .tinderCards__cardContainer {
         height: 55vh;
+        margin-top: 2vh;
+
     }
 
     .iconContainer {
