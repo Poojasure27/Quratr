@@ -1,4 +1,4 @@
-"use client";
+"use client"; 
 import React, { useEffect, useState } from "react";
 import TinderCard from "react-tinder-card";
 import Icons from '../../components/swipe/swipe';
@@ -16,7 +16,7 @@ interface Restaurant {
 
 const RestaurantCards: React.FC = () => {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
-  const [filteredRestaurants, setFilteredRestaurants] = useState<Restaurant[]>([]);
+  const [lastDirection, setLastDirection] = useState(""); // Keep track of the last swipe direction
 
   useEffect(() => {
     const fetchRestaurants = async () => {
@@ -40,7 +40,6 @@ const RestaurantCards: React.FC = () => {
           const json: Restaurant[] = XLSX.utils.sheet_to_json(worksheet);
 
           setRestaurants(json);
-          setFilteredRestaurants(json); // Initialize with all restaurants
         };
 
         reader.readAsArrayBuffer(blob);
@@ -53,33 +52,8 @@ const RestaurantCards: React.FC = () => {
   }, []);
 
   const swiped = (direction: string, nameToDelete: string) => {
-    const restaurantToDelete = restaurants.find(r => r.Name === nameToDelete);
-    if (!restaurantToDelete) return;
-
-    if (direction === "left") {
-      // Filter out similar restaurants on left swipe
-      setFilteredRestaurants(prevRestaurants =>
-        prevRestaurants.filter(restaurant =>
-          restaurant.Cuisine !== restaurantToDelete.Cuisine &&
-          restaurant.Location !== restaurantToDelete.Location
-        )
-      );
-    } else if (direction === "right") {
-      // Optionally prioritize similar restaurants on right swipe
-      setFilteredRestaurants(prevRestaurants => {
-        const similarRestaurants = restaurants.filter(restaurant =>
-          restaurant.Cuisine === restaurantToDelete.Cuisine ||
-          restaurant.Location === restaurantToDelete.Location
-        );
-        const otherRestaurants = prevRestaurants.filter(restaurant =>
-          restaurant.Cuisine !== restaurantToDelete.Cuisine &&
-          restaurant.Location !== restaurantToDelete.Location
-        );
-        return [...similarRestaurants, ...otherRestaurants]; // Show similar first
-      });
-    }
-
-    // Remove the swiped restaurant from the original list
+    setLastDirection(direction);
+    console.log("Removing: " + nameToDelete);
     setRestaurants((prevRestaurants) =>
       prevRestaurants.filter((restaurant) => restaurant.Name !== nameToDelete)
     );
@@ -93,7 +67,7 @@ const RestaurantCards: React.FC = () => {
     <div>
       <Header />
       <div className={styles.tinderCards__cardContainer}>
-        {filteredRestaurants.map((restaurant) => (
+        {restaurants.map((restaurant) => (
           <TinderCard
             className={styles.swipe}
             key={restaurant.Name}
