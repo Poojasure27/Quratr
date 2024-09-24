@@ -32,7 +32,7 @@
 .tinderCards__cardContainer {
     display: flex;
     justify-content: center;
-    margin-top: 10vh;
+    margin-top: 7vh;
     position: relative;
     width: 100%; /* Ensure it's full width */
     height: 100%; /* Adjust for better stacking */
@@ -52,5 +52,5 @@
     display: flex;
     justify-content: center;
     width: 100%;
-    margin-top: 20px; /* Adds some space between the cards and the icons */
+    margin-top: 40px; /* Adds some space between the cards and the icons */
 }
