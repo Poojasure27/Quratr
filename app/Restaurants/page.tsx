@@ -2,21 +2,21 @@
 import React, { useEffect, useState, useRef } from "react";
 import TinderCard from "react-tinder-card";
 import SwipeButtons from '../../components/swipe/swipe';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Header from "../../components/Header/Header";
+import RestaurantDetails from '../../components/RestaurantDetails/RestaurantDetails';
 import * as XLSX from "xlsx";
 import styles from "./restaurant.module.css";
 
 interface Restaurant {
-  Name: string;
-  Cuisine: string;
-  Rating: number;
-  Location: string;
-  "Image URL": string;
+  [key: string]: string | number; // This allows for dynamic keys from the Excel sheet
 }
 
 const RestaurantCards: React.FC = () => {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [showDetails, setShowDetails] = useState(false);
+  const [selectedRestaurant, setSelectedRestaurant] = useState<Restaurant | null>(null);
   const currentIndexRef = useRef(currentIndex);
 
   const childRefs = useRef<any[]>([]);
@@ -39,14 +39,12 @@ const RestaurantCards: React.FC = () => {
           const workbook = XLSX.read(data, { type: "array" });
           
           const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-          const json: Restaurant[] = XLSX.utils.sheet_to_json(worksheet);
+          const json = XLSX.utils.sheet_to_json(worksheet) as Restaurant[];
           
-          // Reverse the array so we start from the last item
           const reversedRestaurants = json.reverse();
           setRestaurants(reversedRestaurants);
           childRefs.current = Array(reversedRestaurants.length).fill(0).map((i) => React.createRef());
           
-          // Set the current index to the last item (which is now the first in our reversed array)
           setCurrentIndex(reversedRestaurants.length - 1);
           currentIndexRef.current = reversedRestaurants.length - 1;
         };
@@ -85,40 +83,66 @@ const RestaurantCards: React.FC = () => {
     }
   };
 
+  const handleSwipe = (direction: string, restaurant: Restaurant) => {
+    if (direction === 'up') {
+      setSelectedRestaurant(restaurant);
+      setShowDetails(true);
+    } else {
+      swiped(direction, restaurant.Name as string, currentIndex);
+    }
+  };
+
   return (
-    <div>
+    <div className={styles.pageContainer}>
       <Header />
-      <div className={styles.tinderCards__cardContainer}>
+      <div className={`${styles.tinderCards__cardContainer} ${showDetails ? styles.blurred : ''}`}>
         {restaurants.map((restaurant, index) => (
           <TinderCard
             ref={childRefs.current[index]}
             className={styles.swipe}
-            key={restaurant.Name}
-            preventSwipe={["up", "down"]}
-            onSwipe={(dir) => swiped(dir, restaurant.Name, index)}
-            onCardLeftScreen={() => outOfFrame(restaurant.Name, index)}
+            key={restaurant.Name as string}
+            onSwipe={(dir) => handleSwipe(dir, restaurant)}
+            onCardLeftScreen={() => outOfFrame(restaurant.Name as string, index)}
             swipeRequirementType="position"
-            swipeThreshold={10}
+            swipeThreshold={80}
             flickOnSwipe={true}
           >
             <div
               style={{ backgroundImage: `url(${restaurant["Image URL"]})` }}
               className={styles.card}
             >
-              <h3>{restaurant.Name}</h3>
-              <p>{restaurant.Cuisine}</p>
-              <p>Rating: {restaurant.Rating} ⭐</p>
-              <p>{restaurant.Location}</p>
+              <div className={styles.cardContent}>
+                <h3>{restaurant.Name}</h3>
+                <p>{restaurant.Cuisine}</p>
+                <p>Rating: {restaurant.Rating} ⭐</p>
+                <p>{restaurant.Location}</p>
+              </div>
             </div>
           </TinderCard>
         ))}
       </div>
-      <div className={styles.iconContainer}>
+
+      {/* Add swipe-up message with bounce effect */}
+      {!showDetails && (
+        <div className={styles.swipeUpMessage}>
+          <KeyboardArrowUpIcon className={styles.bounceIcon} />
+          <p>Swipe up</p>
+        </div>
+      )}
+
+      <div className={`${styles.iconContainer} ${showDetails ? styles.hidden : ''}`}>
         <SwipeButtons
           onSwipeLeft={() => swipe('left')}
           onSwipeRight={() => swipe('right')}
         />
       </div>
+      
+      {showDetails && selectedRestaurant && (
+        <RestaurantDetails
+          restaurant={selectedRestaurant}
+          onClose={() => setShowDetails(false)}
+        />
+      )}
     </div>
   );
 };
