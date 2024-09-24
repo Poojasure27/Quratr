@@ -15,7 +15,8 @@ interface Restaurant {
   Rating: number;
   Location: string;
   'Image URL': string;
-  [key: string]: any;
+  [key: string]: string | number;
+
 }
 
 // Define the component
