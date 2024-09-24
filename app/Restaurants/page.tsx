@@ -16,8 +16,14 @@ interface Restaurant {
   Location: string;
   'Image URL': string;
   [key: string]: string | number;
-
 }
+
+// Define the TinderCardRef interface
+interface TinderCardRef {
+  swipe: (direction: string) => void;
+}
+
+type SwipeDirection = string; // Allow any string
 
 // Define the component
 const RestaurantCards: React.FC = () => {
@@ -28,7 +34,7 @@ const RestaurantCards: React.FC = () => {
   const currentIndexRef = useRef<number>(currentIndex);
 
   // Update the type for childRefs to hold TinderCard refs
-  const childRefs = useRef<(React.RefObject<TinderCard> | null)[]>([]);
+  const childRefs = useRef<(React.RefObject<TinderCardRef> | null)[]>([]);
 
   // Fetch restaurants from the spreadsheet
   useEffect(() => {
@@ -54,7 +60,8 @@ const RestaurantCards: React.FC = () => {
           setRestaurants(reversedRestaurants);
 
           // Initialize refs array for TinderCard components
-          childRefs.current = reversedRestaurants.map(() => React.createRef<TinderCard>());
+          childRefs.current = reversedRestaurants.map(() => React.createRef<TinderCardRef>());
+
           setCurrentIndex(reversedRestaurants.length - 1);
           currentIndexRef.current = reversedRestaurants.length - 1;
         };
@@ -90,17 +97,22 @@ const RestaurantCards: React.FC = () => {
   // Swipe the card in a specific direction
   const swipe = async (dir: string) => {
     if (canSwipe && currentIndex < restaurants.length) {
-      await childRefs.current[currentIndex]?.current?.swipe(dir); // Access the current ref to swipe
+      const currentCard = childRefs.current[currentIndex]?.current;
+      if (currentCard) {
+        currentCard.swipe(dir); // No type assertion needed
+      }
     }
   };
 
   // Handle swipe actions
-  const handleSwipe = (direction: string, restaurant: Restaurant) => {
-    if (direction === 'up') {
-      setSelectedRestaurant(restaurant);
-      setShowDetails(true);
-    } else {
-      swiped(direction, restaurant.Name, currentIndex);
+  const handleSwipe = (direction: SwipeDirection, restaurant: Restaurant) => {
+    if (['up', 'down', 'left', 'right'].includes(direction)) { // Validate direction
+      if (direction === 'up') {
+        setSelectedRestaurant(restaurant);
+        setShowDetails(true);
+      } else {
+        swiped(direction, restaurant.Name, currentIndex);
+      }
     }
   };
 
@@ -110,10 +122,10 @@ const RestaurantCards: React.FC = () => {
       <div className={`${styles.tinderCards__cardContainer} ${showDetails ? styles.blurred : ''}`}>
         {restaurants.map((restaurant, index) => (
           <TinderCard
-            ref={childRefs.current[index]} // Attach ref properly
+            ref={childRefs.current[index]}
             className={styles.swipe}
             key={restaurant.Name}
-            onSwipe={(dir) => handleSwipe(dir, restaurant)}
+            onSwipe={(dir: string) => handleSwipe(dir, restaurant)} // Use string type
             onCardLeftScreen={() => outOfFrame(restaurant.Name, index)}
             swipeRequirementType="position"
             swipeThreshold={80}
