@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState, useRef } from "react";
-import TinderCard from "react-tinder-card";
+import TinderCard from "react-tinder-card"; 
 import SwipeButtons from '../../components/swipe/swipe';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Header from "../../components/Header/Header";
@@ -8,56 +8,66 @@ import RestaurantDetails from '../../components/RestaurantDetails/RestaurantDeta
 import * as XLSX from "xlsx";
 import styles from "./restaurant.module.css";
 
+// Define the Restaurant interface
 interface Restaurant {
-  [key: string]: string | number; // This allows for dynamic keys from the Excel sheet
+  Name: string;
+  Cuisine: string;
+  Rating: number;
+  Location: string;
+  'Image URL': string;
+  [key: string]: any;
 }
 
+// Define the component
 const RestaurantCards: React.FC = () => {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [showDetails, setShowDetails] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [showDetails, setShowDetails] = useState<boolean>(false);
   const [selectedRestaurant, setSelectedRestaurant] = useState<Restaurant | null>(null);
-  const currentIndexRef = useRef(currentIndex);
+  const currentIndexRef = useRef<number>(currentIndex);
 
-  const childRefs = useRef<any[]>([]);
+  // Update the type for childRefs to hold TinderCard refs
+  const childRefs = useRef<(React.RefObject<TinderCard> | null)[]>([]);
 
+  // Fetch restaurants from the spreadsheet
   useEffect(() => {
     const fetchRestaurants = async () => {
       try {
         const url = "https://docs.google.com/spreadsheets/d/1fZcP0WVpspmU-LlCtqMR__uwaqvMIEjczQ4Intfv4yk/pub?output=xlsx";
-        
         const response = await fetch(url);
+
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        
+
         const blob = await response.blob();
         const reader = new FileReader();
-        
+
         reader.onload = (e) => {
           const data = new Uint8Array(e.target?.result as ArrayBuffer);
           const workbook = XLSX.read(data, { type: "array" });
-          
           const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-          const json = XLSX.utils.sheet_to_json(worksheet) as Restaurant[];
-          
+          const json = XLSX.utils.sheet_to_json<Restaurant>(worksheet); // Specify the type here
+
           const reversedRestaurants = json.reverse();
           setRestaurants(reversedRestaurants);
-          childRefs.current = Array(reversedRestaurants.length).fill(0).map((i) => React.createRef());
-          
+
+          // Initialize refs array for TinderCard components
+          childRefs.current = reversedRestaurants.map(() => React.createRef<TinderCard>());
           setCurrentIndex(reversedRestaurants.length - 1);
           currentIndexRef.current = reversedRestaurants.length - 1;
         };
-        
+
         reader.readAsArrayBuffer(blob);
       } catch (error) {
         console.error("Error fetching or processing the spreadsheet:", error);
       }
     };
-    
+
     fetchRestaurants();
   }, []);
 
+  // Update the current index
   const updateCurrentIndex = (val: number) => {
     setCurrentIndex(val);
     currentIndexRef.current = val;
@@ -65,30 +75,31 @@ const RestaurantCards: React.FC = () => {
 
   const canSwipe = currentIndex >= 0;
 
+  // Handle swipe action
   const swiped = (direction: string, nameToDelete: string, index: number) => {
     console.log("Removing: " + nameToDelete);
     updateCurrentIndex(index - 1);
   };
 
+  // Handle card leaving screen
   const outOfFrame = (name: string, idx: number) => {
     console.log(`${name} (${idx}) left the screen!`, currentIndexRef.current);
-    if (currentIndexRef.current >= idx) {
-      childRefs.current[idx].current.restoreCard();
-    }
   };
 
+  // Swipe the card in a specific direction
   const swipe = async (dir: string) => {
     if (canSwipe && currentIndex < restaurants.length) {
-      await childRefs.current[currentIndex].current.swipe(dir);
+      await childRefs.current[currentIndex]?.current?.swipe(dir); // Access the current ref to swipe
     }
   };
 
+  // Handle swipe actions
   const handleSwipe = (direction: string, restaurant: Restaurant) => {
     if (direction === 'up') {
       setSelectedRestaurant(restaurant);
       setShowDetails(true);
     } else {
-      swiped(direction, restaurant.Name as string, currentIndex);
+      swiped(direction, restaurant.Name, currentIndex);
     }
   };
 
@@ -98,11 +109,11 @@ const RestaurantCards: React.FC = () => {
       <div className={`${styles.tinderCards__cardContainer} ${showDetails ? styles.blurred : ''}`}>
         {restaurants.map((restaurant, index) => (
           <TinderCard
-            ref={childRefs.current[index]}
+            ref={childRefs.current[index]} // Attach ref properly
             className={styles.swipe}
-            key={restaurant.Name as string}
+            key={restaurant.Name}
             onSwipe={(dir) => handleSwipe(dir, restaurant)}
-            onCardLeftScreen={() => outOfFrame(restaurant.Name as string, index)}
+            onCardLeftScreen={() => outOfFrame(restaurant.Name, index)}
             swipeRequirementType="position"
             swipeThreshold={80}
             flickOnSwipe={true}
@@ -122,7 +133,6 @@ const RestaurantCards: React.FC = () => {
         ))}
       </div>
 
-      {/* Add swipe-up message with bounce effect */}
       {!showDetails && (
         <div className={styles.swipeUpMessage}>
           <KeyboardArrowUpIcon className={styles.bounceIcon} />
