@@ -1,4 +1,4 @@
-"use client"; 
+"use client";
 import React, { useEffect, useState } from "react";
 import TinderCard from "react-tinder-card";
 import Icons from '../../components/swipe/swipe';
@@ -16,7 +16,6 @@ interface Restaurant {
 
 const RestaurantCards: React.FC = () => {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
-  const [lastDirection, setLastDirection] = useState(""); // Keep track of the last swipe direction
 
   useEffect(() => {
     const fetchRestaurants = async () => {
@@ -52,7 +51,6 @@ const RestaurantCards: React.FC = () => {
   }, []);
 
   const swiped = (direction: string, nameToDelete: string) => {
-    setLastDirection(direction);
     console.log("Removing: " + nameToDelete);
     setRestaurants((prevRestaurants) =>
       prevRestaurants.filter((restaurant) => restaurant.Name !== nameToDelete)
