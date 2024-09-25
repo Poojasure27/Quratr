@@ -151,7 +151,7 @@ const RestaurantCards: React.FC = () => {
         ))}
       </div>
 
-      {!showDetails && (
+      {/* {!showDetails && (
         <div className={styles.swipeUpMessage}>
           <KeyboardArrowUpIcon 
             className={styles.bounceIcon} 
@@ -159,7 +159,7 @@ const RestaurantCards: React.FC = () => {
           />
           <p>Swipe up</p>
         </div>
-      )}
+      )} */}
 
       <div className={`${styles.iconContainer} ${showDetails ? styles.hidden : ''}`}>
         <SwipeButtons
