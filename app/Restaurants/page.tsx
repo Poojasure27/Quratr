@@ -169,7 +169,7 @@ const RestaurantCards: React.FC = () => {
         <button 
           className={styles.navButton} 
           style={{ backgroundColor: "#fed4e4" }}
-          onClick={() => {/* Add your Feed functionality here */}}
+          onClick={() => router.push('/feed')}
         >
           Feed
         </button>
