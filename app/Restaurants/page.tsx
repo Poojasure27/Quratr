@@ -144,7 +144,7 @@ const RestaurantCards: React.FC = () => {
                 <h3>{restaurant.Name}</h3>
                 <p>{restaurant.Cuisine}</p>
                 <p>Rating: {restaurant.Rating} ⭐</p>
-                <p>{restaurant.Location}</p>
+                <p>{restaurant.Address}</p>
               </div>
             </div>
           </TinderCard>
