@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import TinderCard from "react-tinder-card"; 
 import SwipeButtons from '../../components/swipe/swipe';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+// import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Header from "../../components/Header/Header";
 import RestaurantDetails from '../../components/RestaurantDetails/RestaurantDetails';
 import * as XLSX from "xlsx";
@@ -54,7 +54,7 @@ const RestaurantCards: React.FC = () => {
           const data = new Uint8Array(e.target?.result as ArrayBuffer);
           const workbook = XLSX.read(data, { type: "array" });
           const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-          const json = XLSX.utils.sheet_to_json<Restaurant>(worksheet); // Specify the type here
+          const json = XLSX.utils.sheet_to_json<Restaurant>(worksheet);
 
           const reversedRestaurants = json.reverse();
           setRestaurants(reversedRestaurants);
@@ -99,14 +99,14 @@ const RestaurantCards: React.FC = () => {
     if (canSwipe && currentIndex < restaurants.length) {
       const currentCard = childRefs.current[currentIndex]?.current;
       if (currentCard) {
-        currentCard.swipe(dir); // No type assertion needed
+        currentCard.swipe(dir);
       }
     }
   };
 
   // Handle swipe actions
   const handleSwipe = (direction: SwipeDirection, restaurant: Restaurant) => {
-    if (['up', 'down', 'left', 'right'].includes(direction)) { // Validate direction
+    if (['up', 'down', 'left', 'right'].includes(direction)) {
       if (direction === 'up') {
         showRestaurantDetails(restaurant);
       } else {
@@ -130,7 +130,7 @@ const RestaurantCards: React.FC = () => {
             ref={childRefs.current[index]}
             className={styles.swipe}
             key={restaurant.Name}
-            onSwipe={(dir: string) => handleSwipe(dir, restaurant)} // Use string type
+            onSwipe={(dir: string) => handleSwipe(dir, restaurant)}
             onCardLeftScreen={() => outOfFrame(restaurant.Name, index)}
             swipeRequirementType="position"
             swipeThreshold={80}
@@ -151,21 +151,28 @@ const RestaurantCards: React.FC = () => {
         ))}
       </div>
 
-      {/* {!showDetails && (
-        <div className={styles.swipeUpMessage}>
-          <KeyboardArrowUpIcon 
-            className={styles.bounceIcon} 
-            onClick={() => selectedRestaurant && showRestaurantDetails(selectedRestaurant)} // Call function on click
-          />
-          <p>Swipe up</p>
-        </div>
-      )} */}
-
       <div className={`${styles.iconContainer} ${showDetails ? styles.hidden : ''}`}>
         <SwipeButtons
           onSwipeLeft={() => swipe('left')}
           onSwipeRight={() => swipe('right')}
         />
+      </div>
+      
+      <div className={styles.buttonContainer}>
+        <button 
+          className={styles.navButton} 
+          style={{ backgroundColor: "#fed4e4" }}
+          onClick={() => {/* Add your Discover functionality here */}}
+        >
+          Discover
+        </button>
+        <button 
+          className={styles.navButton} 
+          style={{ backgroundColor: "#fed4e4" }}
+          onClick={() => {/* Add your Feed functionality here */}}
+        >
+          Feed
+        </button>
       </div>
       
       {showDetails && selectedRestaurant && (

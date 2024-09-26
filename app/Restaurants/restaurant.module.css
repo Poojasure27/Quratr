@@ -1,70 +1,67 @@
 .card {
-    position: relative;
-    width: 90vw;
-    max-width: 600px;
-    padding: 20px;
-    height: 50vh;
-    border-radius: 20px;
-    background-size: cover;
-    background-position: center;
-    box-shadow: 0px 18px 53px 0px rgba(0, 0, 0, 0.3); 
-    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  position: relative;
+  width: 90vw;
+  max-width: 600px;
+  padding: 20px;
+  height: 50vh;
+  border-radius: 20px;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0px 18px 53px 0px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
 }
-
-
 
 /* Title styling */
 .card h3 {
-    position: absolute;
-    bottom: 10px;
-    color: white;
+  position: absolute;
+  bottom: 10px;
+  color: white;
 }
 
 /* Text content styling */
 .card p {
-    font-weight: bolder;
-    margin: 5px 0; /* Add some spacing between paragraphs */
-    bottom: 10px;
-    color: white;
-    z-index: 2; /* Ensure text is above any other elements */
-    text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7);
-    background: rgba(39, 39, 39, 0.5); /* Semi-transparent background */
-    border-radius: 20px;
-    z-index: 1; /* Place the overlay behind the text */
+  font-weight: bolder;
+  margin: 5px 0;
+  bottom: 10px;
+  color: white;
+  z-index: 2;
+  text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7);
+  background: rgba(39, 39, 39, 0.5);
+  border-radius: 20px;
+  z-index: 1;
 }
 
-
 .tinderCards__cardContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 5vh;
-    position: relative;
-    width: 100%;
-    height: 60vh;
-    overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2vh; /* Reduced margin to bring it closer to the iconContainer */
+  position: relative;
+  width: 100%;
+  height: 60vh;
+  overflow: hidden;
 }
 
 .swipe {
-    position: absolute;
-    will-change: transform;
-    transition: transform 0.08s ease-in-out;
-    cursor: grab;
+  position: absolute;
+  will-change: transform;
+  transition: transform 0.08s ease-in-out;
+  cursor: grab;
 }
 
 .swipe:active {
-    cursor: grabbing;
+  cursor: grabbing;
 }
 
 .iconContainer {
-    position: fixed;
-    bottom: 5vh;
-    left: 0;
-    right: 0;
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    padding: 10px;
+  position: fixed;
+  bottom: 20vh; /* Adjusted bottom value to reduce space */
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 10px;
 }
 
 .swipeUpMessage {
@@ -79,10 +76,11 @@
 }
 
 .bounceIcon {
-  font-size: 30px; /* Adjust size if needed */
+  font-size: 30px;
   color: #555;
   animation: bounce 1.5s infinite;
   margin-bottom: 5px;
+
 }
 
 @keyframes bounce {
@@ -107,18 +105,64 @@
 
 /* Media query for mobile devices */
 @media (max-width: 768px) {
-    .card {
-        width: 85vw;
-        height: 45vh;
-    }
+  .card {
+    width: 85vw;
+    height: 45vh;
+  }
 
-    .tinderCards__cardContainer {
-        height: 55vh;
-        margin-top: 2vh;
+  .tinderCards__cardContainer {
+    height: 55vh;
+    margin-top: 1vh; /* Further reduced margin for mobile */
+  }
 
-    }
+  .iconContainer {
+    bottom: 10vh; /* Adjusted for mobile to keep it close */
+  }
+}
 
-    .iconContainer {
-        bottom: 2vh;
-    }
+.buttonContainer {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  padding: 10px 20px;
+  position: fixed;
+  bottom: 5vh; /* Positioned below the iconContainer */
+  left: 0;
+  
+}
+
+.navButton {
+  position: relative;
+  justify-content: space-evenly;
+  width: 20px;
+  bottom: 5vh; 
+  padding: 10px 20px !important;
+  font-size: 16px;
+  border: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: #000 !important;
+  border-color: #fed4e4;
+  color: #fff;
+  font-weight: bold;
+}
+
+.navButton:hover {
+  opacity: 0.8;
+  transform: translateY(-2px);
+}
+
+/* Media query for mobile devices */
+@media (max-width: 768px) {
+  .buttonContainer {
+    padding: 8px 30px;
+    bottom: 3vh;
+  }
+
+  .navButton {
+    padding: 8px 20px;
+    font-size: 14px;
+    width: 90%;
+    background-color: #000;
+  }
 }
