@@ -1,7 +1,7 @@
 "use client";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import * as XLSX from "xlsx"; // For fetching restaurant data from a spreadsheet
+import * as XLSX from "xlsx";
 import styles from "./dynamicCat.module.css";
 
 interface Restaurant {
@@ -29,7 +29,7 @@ const CategoryPage: React.FC = () => {
         const worksheet = workbook.Sheets[workbook.SheetNames[0]];
         const json: Restaurant[] = XLSX.utils.sheet_to_json(worksheet);
 
-        // Ensure category is a string
+        
         const categoryString = Array.isArray(category) ? category[0] : category || '';
 
         // Filter restaurants based on the category parameter

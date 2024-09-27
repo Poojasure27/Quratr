@@ -1,4 +1,4 @@
-// components/ui/Button.tsx
+
 import React from 'react';
 import clsx from 'clsx';
 
@@ -7,7 +7,7 @@ interface ButtonProps {
   onClick?: () => void;
   className?: string;
   disabled?: boolean;
-  type?: 'button' | 'submit' | 'reset'; // Add this line to include type attribute
+  type?: 'button' | 'submit' | 'reset'; 
 }
 
 export const Button: React.FC<ButtonProps> = ({
@@ -15,7 +15,7 @@ export const Button: React.FC<ButtonProps> = ({
   onClick,
   className,
   disabled,
-  type = 'button', // Default type to 'button' to avoid any default behavior issues
+  type = 'button', 
 }) => {
   return (
     <button

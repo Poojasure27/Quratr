@@ -8,7 +8,7 @@ import RestaurantDetails from '../../components/RestaurantDetails/RestaurantDeta
 import * as XLSX from "xlsx";
 import styles from "./restaurant.module.css";
 
-// Define the Restaurant interface
+
 interface Restaurant {
   Name: string;
   Cuisine: string;
@@ -18,14 +18,14 @@ interface Restaurant {
   [key: string]: string | number;
 }
 
-// Define the TinderCardRef interface
+
 interface TinderCardRef {
   swipe: (direction: string) => void;
 }
 
-type SwipeDirection = string; // Allow any string
+type SwipeDirection = string; 
 
-// Define the component
+
 const RestaurantCards: React.FC = () => {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
@@ -33,10 +33,10 @@ const RestaurantCards: React.FC = () => {
   const [selectedRestaurant, setSelectedRestaurant] = useState<Restaurant | null>(null);
   const currentIndexRef = useRef<number>(currentIndex);
 
-  // Update the type for childRefs to hold TinderCard refs
+  
   const childRefs = useRef<(React.RefObject<TinderCardRef> | null)[]>([]);
 
-  // Fetch restaurants from the spreadsheet
+  // spreadsheet fetching
   useEffect(() => {
     const fetchRestaurants = async () => {
       try {
@@ -75,7 +75,7 @@ const RestaurantCards: React.FC = () => {
     fetchRestaurants();
   }, []);
 
-  // Update the current index
+  
   const updateCurrentIndex = (val: number) => {
     setCurrentIndex(val);
     currentIndexRef.current = val;
@@ -83,18 +83,18 @@ const RestaurantCards: React.FC = () => {
 
   const canSwipe = currentIndex >= 0;
 
-  // Handle swipe action
+  // swipe action
   const swiped = (direction: string, nameToDelete: string, index: number) => {
     console.log("Removing: " + nameToDelete);
     updateCurrentIndex(index - 1);
   };
 
-  // Handle card leaving screen
+  
   const outOfFrame = (name: string, idx: number) => {
     console.log(`${name} (${idx}) left the screen!`, currentIndexRef.current);
   };
 
-  // Swipe the card in a specific direction
+ 
   const swipe = async (dir: string) => {
     if (canSwipe && currentIndex < restaurants.length) {
       const currentCard = childRefs.current[currentIndex]?.current;
@@ -104,7 +104,7 @@ const RestaurantCards: React.FC = () => {
     }
   };
 
-  // Handle swipe actions
+ 
   const handleSwipe = (direction: SwipeDirection, restaurant: Restaurant) => {
     if (['up', 'down', 'left', 'right'].includes(direction)) {
       if (direction === 'up') {
@@ -115,7 +115,7 @@ const RestaurantCards: React.FC = () => {
     }
   };
 
-  // Show restaurant details
+  
   const showRestaurantDetails = (restaurant: Restaurant) => {
     setSelectedRestaurant(restaurant);
     setShowDetails(true);
@@ -162,7 +162,7 @@ const RestaurantCards: React.FC = () => {
         <button 
           className={styles.navButton} 
           style={{ backgroundColor: "#fed4e4" }}
-          onClick={() => {/* Add your Discover functionality here */}}
+          onClick={() => {/* function to be added */}}
         >
           Discover
         </button>

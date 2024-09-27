@@ -31,12 +31,12 @@ const Signup: React.FC = () => {
 
   const handleGoogleSignup = () => {
     // Handle Google sign-up logic
-    router.push("/restaurant"); // Redirect after successful Google sign-up
+    router.push("/Restaurant"); 
   };
 
   const handleFacebookSignup = () => {
     // Handle Facebook sign-up logic
-    router.push("/restaurant"); // Redirect after successful Facebook sign-up
+    router.push("/Restaurant"); 
   };
 
   return (
@@ -89,7 +89,7 @@ const Signup: React.FC = () => {
             </button>
           </div>
 
-          {/* Add "Already have an account? Login" link */}
+         
           <div className={styles.loginLink}>
             <p>
               Already have an account?{" "}

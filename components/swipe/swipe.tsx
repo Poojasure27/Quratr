@@ -7,16 +7,16 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import BoltIcon from "@mui/icons-material/Bolt";
 import IconButton from "@mui/material/IconButton";
 
-// Define SwipeButtonsProps with optional handlers for other icons
+
 interface SwipeButtonsProps {
   onSwipeLeft: () => void;
   onSwipeRight: () => void;
-  onRepeatClick?: () => void;   // Optional handler for replay
-  onStarClick?: () => void;     // Optional handler for star
-  onLightningClick?: () => void; // Optional handler for lightning bolt
+  onRepeatClick?: () => void;   
+  onStarClick?: () => void;     
+  onLightningClick?: () => void; 
 }
 
-// Memoize component to prevent unnecessary re-renders
+
 const SwipeButtons: React.FC<SwipeButtonsProps> = React.memo(
   function SwipeButtons({
     onSwipeLeft,

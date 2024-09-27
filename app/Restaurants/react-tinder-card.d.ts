@@ -8,7 +8,7 @@ declare module 'react-tinder-card' {
     swipeRequirementType?: string;
     swipeThreshold?: number;
     flickOnSwipe?: boolean;
-    children?: React.ReactNode; // Add this line to allow children
+    children?: React.ReactNode; 
   }
 
   interface TinderCardRef {

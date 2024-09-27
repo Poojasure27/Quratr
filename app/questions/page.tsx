@@ -1,8 +1,7 @@
-// app/questions/page.tsx
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation'; // For Next.js 13, use `next/navigation`
+import { useRouter } from 'next/navigation'; 
 
 type Preferences = Record<number, number>;
 
@@ -35,7 +34,7 @@ const Questionnaire: React.FC = () => {
       body: JSON.stringify({ preferences }),
     });
 
-    // Navigate to the Restaurants page
+    
     router.push('/Restaurants');
   };
 

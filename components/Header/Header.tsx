@@ -1,13 +1,12 @@
 import React from "react";
-import styles from "./header.module.css"; // Assuming you have CSS modules for styling
+import styles from "./header.module.css"; 
 import PersonIcon from "@mui/icons-material/Person";
 import TuneIcon from '@mui/icons-material/Tune';
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import Link from "next/link";
-import Image from "next/image"; // Import Image from Next.js
-import logo from '../../public/assets/logo.jpeg'; // Adjust the path if necessary
-
+import Image from "next/image"; 
+import logo from '../../public/assets/logo.jpeg'; 
 interface HeaderProps {
   backButton?: string;
 }
@@ -31,8 +30,8 @@ const Header: React.FC<HeaderProps> = ({ backButton }) => {
           className={styles.header__logo}
           src={logo}
           alt="Quratr logo"
-          width={100} // Set the desired width
-          height={40} // Set the desired height
+          width={100} 
+          height={40} 
         />
       </Link>
       <Link href="/chat" passHref>

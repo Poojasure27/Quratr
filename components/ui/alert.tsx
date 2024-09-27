@@ -1,10 +1,10 @@
-// components/ui/alert.tsx
+
 import React from 'react';
-import clsx from 'clsx'; // Optional: use clsx for better class name management
+import clsx from 'clsx'; // clsx for better class name management
 
 interface AlertProps {
   children: React.ReactNode;
-  className?: string; // Add className to allow custom styling
+  className?: string; 
 }
 
 export function Alert({ children, className }: AlertProps) {

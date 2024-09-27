@@ -1,15 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-// Sample data for visits
+
 let visits = [
   {
     id: '1',
     restaurantName: 'Tasty Bites',
-    userName: 'John Doe',
+    userName: 'Pooja',
     date: '2024-09-26',
     rating: 4,
     review: 'Great food and atmosphere!',
-    imageUrl: '/api/placeholder/400/300', // Placeholder image
+    imageUrl: '/api/placeholder/400/300', 
   },
 ];
 
@@ -22,23 +22,23 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   const formData = await request.formData(); // Parse multipart/form-data
 
-  // Create a new visit object
+  //new visit object
   const newVisit = {
     id: Date.now().toString(),
     restaurantName: formData.get('restaurantName'),
-    userName: 'John Doe', // Replace with actual user data as needed
+    userName: 'Pooja', 
     date: formData.get('date'),
-    rating: parseInt(formData.get('rating') as string, 10), // Convert rating to number
+    rating: parseInt(formData.get('rating') as string, 10), 
     review: formData.get('review'),
-    imageUrl: '', // Placeholder for the image URL
+    imageUrl: '', 
   };
 
   // Handle file upload
   const imageFile = formData.get('image') as File;
   if (imageFile) {
-    // Assuming you're storing images on your server
+   
     const imageUrl = await uploadImage(imageFile); // Function to handle image upload
-    newVisit.imageUrl = imageUrl; // Set the image URL in the new visit object
+    newVisit.imageUrl = imageUrl; 
   }
 
   visits.push(newVisit); // Add the new visit to the visits array
